@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CurrentMoviesTMDB</string>
+    <string name="search_hint">Search a movie tittle!</string>
+</resources>

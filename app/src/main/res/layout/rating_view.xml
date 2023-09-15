@@ -1,0 +1,20 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressItem_Indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        app:indicatorSize="52dp"
+        android:progress="82"/>
+
+    <TextView
+        android:id="@+id/progressItem_Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="82%"
+        android:textSize="16sp" />
+
+</merge>
