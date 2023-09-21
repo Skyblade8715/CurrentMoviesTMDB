@@ -1,6 +1,6 @@
 package com.skycom.currentmoviestmdb.domain.model.searched_movie
 
-import com.skycom.currentmoviestmdb.domain.model.now_playing.Movie
+import com.skycom.currentmoviestmdb.domain.model.movie.Movie
 
 data class SearchedMovie(
     val page: Int,

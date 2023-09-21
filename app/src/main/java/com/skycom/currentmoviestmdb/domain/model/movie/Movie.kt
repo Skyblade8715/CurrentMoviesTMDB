@@ -1,4 +1,4 @@
-package com.skycom.currentmoviestmdb.domain.model.now_playing
+package com.skycom.currentmoviestmdb.domain.model.movie
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

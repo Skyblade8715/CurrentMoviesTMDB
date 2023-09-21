@@ -5,6 +5,6 @@ data class UseCaseMovies(
     val deleteLikedMovie: DeleteLikedMovie,
     val getAllLikedMovies: GetAllLikedMovies,
     val getMovieDetails: GetMovieDetails,
-    val getNowPlaying: GetNowPlaying,
+    val getNowPlayingMovies: GetNowPlayingMovies,
     val searchMovies: SearchMovies
 )

@@ -19,7 +19,7 @@
             android:name=".presentation.details.MovieDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.playing.MainActivity"
+            android:name=".presentation.home.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

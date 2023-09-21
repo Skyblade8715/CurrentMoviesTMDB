@@ -8,7 +8,6 @@ import com.skycom.currentmoviestmdb.domain.model.movie_details.MovieDetails
 import com.skycom.currentmoviestmdb.domain.use_cases.UseCaseMovies
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +19,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val _movieDetails = MutableLiveData<MovieDetails>()
     val movieDetails: LiveData<MovieDetails> get() = _movieDetails
 
-    val loadingState = MutableLiveData<Boolean>()
+    private val loadingState = MutableLiveData<Boolean>()
     val errorState = MutableLiveData<String>()
 
 

@@ -13,8 +13,8 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import coil.load
 import com.skycom.currentmoviestmdb.R
 import com.skycom.currentmoviestmdb.databinding.ActivityMovieDetailsBinding
-import com.skycom.currentmoviestmdb.domain.model.now_playing.Movie
-import com.skycom.currentmoviestmdb.presentation.playing.NowPlayingViewModel
+import com.skycom.currentmoviestmdb.domain.model.movie.Movie
+import com.skycom.currentmoviestmdb.presentation.home.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -23,7 +23,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieDetailsBinding
     private lateinit var viewModel : MovieDetailsViewModel
-    private lateinit var nowPlayingViewModel : NowPlayingViewModel
+    private lateinit var mainViewModel : MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,36 +31,63 @@ class MovieDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
-        nowPlayingViewModel = ViewModelProvider(this)[NowPlayingViewModel::class.java]
-
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         val movie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra("movieDetails", Movie::class.java)
         } else {
             intent.getParcelableExtra("movieDetails")
         }
+        val isLiked = intent.getBooleanExtra("isLiked", false)
 
-        viewModel.movieDetails.observe(this) { details ->
-            details?.let {
-                if (details.backdrop_path != null) {
-                    binding.movieDetailsBanner.load("https://image.tmdb.org/t/p/original/${details.backdrop_path}") {
+        setupFromIntent(movie, isLiked)
+        setupFromAPI(isLiked)
+
+        movie?.let { viewModel.fetchMovieDetails(movieId = it.id) }
+    }
+
+    private fun setupFromIntent(movie: Movie?, isLiked: Boolean) {
+        movie?.let {
+            binding.movieDetailsTitle.text = movie.title
+            binding.movieDetailsOverview.text = movie.overview
+            binding.movieDetailsDate.text = movie.release_date
+            binding.movieDetailsProgress.setProgress(movie.vote_average)
+            binding.movieDetailsLang.text =
+                "Couldn't find language"
+            binding.movieDetailsGenres.text =
+                "Couldn't find genre"
+
+            binding.movieDetailsFavourite.isChecked = isLiked
+            binding.movieDetailsFavourite.setOnCheckedChangeListener { _, isChecked ->
+                mainViewModel.setLikedState(movie.id, isChecked)
+                sendMessage(isChecked)
+            }
+        }
+    }
+
+    private fun setupFromAPI(isLiked: Boolean) {
+
+        viewModel.movieDetails.observe(this) { movieDetails ->
+            movieDetails?.let {
+                if (movieDetails.backdrop_path != null) {
+                    binding.movieDetailsBanner.load("https://image.tmdb.org/t/p/original/${movieDetails.backdrop_path}") {
                         crossfade(true)
                         placeholder(getProgressDrawable())
                     }
                 } else {
                     binding.movieDetailsBanner.load(R.drawable.lacking_link_icon)
                 }
-                binding.movieDetailsTitle.text = details.title
-                binding.movieDetailsOverview.text = details.overview
-                binding.movieDetailsDate.text = details.release_date
-                binding.movieDetailsProgress.setProgress(details.vote_average)
+                binding.movieDetailsTitle.text = movieDetails.title
+                binding.movieDetailsOverview.text = movieDetails.overview
+                binding.movieDetailsDate.text = movieDetails.release_date
+                binding.movieDetailsProgress.setProgress(movieDetails.vote_average)
                 binding.movieDetailsLang.text =
-                    details.spoken_languages.joinToString(separator = ", ") { it.english_name }
+                    movieDetails.spoken_languages?.joinToString(separator = ", ") { it.english_name }
                 binding.movieDetailsGenres.text =
-                    details.genres.joinToString(separator = " - ") { it.name }
+                    movieDetails.genres?.joinToString(separator = " - ") { it.name }
 
-                binding.movieDetailsFavourite.isChecked = movie?.isLiked ?: false
+                binding.movieDetailsFavourite.isChecked = isLiked
                 binding.movieDetailsFavourite.setOnCheckedChangeListener { _, isChecked ->
-                    nowPlayingViewModel.setLikedState(details.id, isChecked)
+                    mainViewModel.setLikedState(movieDetails.id, isChecked)
                     sendMessage(isChecked)
                 }
             }
@@ -71,9 +98,6 @@ class MovieDetailsActivity : AppCompatActivity() {
                 Toast.makeText(this@MovieDetailsActivity, errorMessage, Toast.LENGTH_SHORT).show()
             }
         }
-
-        movie?.let { viewModel.fetchMovieDetails(movieId = it.id) }
-
     }
 
     private fun getProgressDrawable(): Drawable {

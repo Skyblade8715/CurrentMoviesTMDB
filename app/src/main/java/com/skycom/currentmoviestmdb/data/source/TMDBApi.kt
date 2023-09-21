@@ -11,11 +11,14 @@ import retrofit2.http.Query
 interface TMDBApi {
 
     @GET("movie/now_playing")
-    suspend fun getNowPlaying(@Query("page") page: Int) : Response<NowPlayingMovies>
+    suspend fun getNowPlayingMovies(@Query("page") page: Int) : Response<NowPlayingMovies>
 
     @GET("movie/{id}")
     suspend fun getMovieDetailsById(@Path("id") movieId: Int) : Response<MovieDetails>
 
     @GET("search/movie")
-    suspend fun searchMovies(@Query("query") searchedString: String) : Response<SearchedMovie>
+    suspend fun getSearchedMovies(
+        @Query("page") page: Int, @Query("query") searchedString: String
+    ) : Response<SearchedMovie>
+
 }

@@ -10,7 +10,7 @@ import com.skycom.currentmoviestmdb.domain.use_cases.AddLikedMovie
 import com.skycom.currentmoviestmdb.domain.use_cases.DeleteLikedMovie
 import com.skycom.currentmoviestmdb.domain.use_cases.GetAllLikedMovies
 import com.skycom.currentmoviestmdb.domain.use_cases.GetMovieDetails
-import com.skycom.currentmoviestmdb.domain.use_cases.GetNowPlaying
+import com.skycom.currentmoviestmdb.domain.use_cases.GetNowPlayingMovies
 import com.skycom.currentmoviestmdb.domain.use_cases.SearchMovies
 import com.skycom.currentmoviestmdb.domain.use_cases.UseCaseMovies
 import dagger.Module
@@ -68,9 +68,8 @@ object AppModule {
             deleteLikedMovie = DeleteLikedMovie(likedMoviesRepository),
             getAllLikedMovies = GetAllLikedMovies(likedMoviesRepository),
             getMovieDetails = GetMovieDetails(movieDetailsRepository),
-            getNowPlaying = GetNowPlaying(nowPlayingRepository),
+            getNowPlayingMovies = GetNowPlayingMovies(nowPlayingRepository),
             searchMovies = SearchMovies(nowPlayingRepository)
         )
     }
-
 }
